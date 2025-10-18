@@ -2,14 +2,17 @@ import { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { easing } from 'maath'
+import { Group, MeshBasicMaterial, PointLight } from 'three'
 
 export default function Satellite(props: any) {
-  const head = useRef<any>()
-  const stripe = useRef<any>()
-  const light = useRef<any>()
+  const head = useRef<Group>(null)
+  const stripe = useRef<MeshBasicMaterial>(null)
+  const light = useRef<PointLight>(null)
   const { nodes, materials } = useGLTF('/satellite.glb')
 
   useFrame((state, delta) => {
+    if (!stripe.current || !head.current || !light.current) return
+
     const t = (1 + Math.sin(state.clock.elapsedTime * 2)) / 2
     stripe.current.color.setRGB(2 + t * 20, 2, 20 + t * 50)
     easing.dampE(head.current.rotation, [0, state.pointer.x * (state.camera.position.z > 1 ? 1 : -1), 0], 0.4, delta)

@@ -1,15 +1,69 @@
+import { useState, useEffect } from 'react'
+import { Sling as Hamburger } from 'hamburger-react'
+
 export default function Overlay() {
+  const [isOpen, setOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
-    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-      <div style={{ position: 'absolute', top: 40, left: 40, fontSize: '24px', fontFamily: 'Meslo, monospace', color: 'white' }}>
-        <h1 style={{ margin: 0 }}>Your Name</h1>
-        <p style={{ margin: 0, fontSize: '16px' }}>Creative Developer</p>
+    <div className="overlay">
+      {/* --- DESKTOP HEADER --- */}
+      <header className="main-header">
+        <a href="#" className="header-link">SpaceStudy Initiative</a>
+        <span className="header-status">Status: Nominal</span>
+      </header>
+
+      {/* --- MOBILE HAMBURGER ICON --- */}
+      <div className="hamburger-menu">
+        <Hamburger toggled={isOpen} toggle={setOpen} size={20} direction="left" color="#333" />
       </div>
-      <div style={{ position: 'absolute', bottom: 40, right: 40, fontSize: '13px', color: 'white' }}>
-        <a href="https://github.com/your-github" target="_blank" rel="noopener noreferrer" style={{ color: 'white', marginRight: '15px' }}>GitHub</a>
-        <a href="https://linkedin.com/in/your-linkedin" target="_blank" rel="noopener noreferrer" style={{ color: 'white', marginRight: '15px' }}>LinkedIn</a>
-        <a href="mailto:your-email@example.com" style={{ color: 'white' }}>Contact</a>
+
+      {/* --- SIDEBAR MENU (MOBILE) --- */}
+      <div className={`sidebar-menu ${isOpen ? 'open' : ''}`}>
+        <nav className="sidebar-content">
+          <a href="#">MISSIONS</a>
+          <a href="#">ARCHIVES</a>
+          <a href="#">TELEMETRY</a>
+          <a href="#">CONTACT</a>
+          <a href="#">SpaceStudy Initiative</a>
+        </nav>
       </div>
+
+
+      {/* --- HERO CONTENT (TOP LEFT) --- */}
+      <div className="hero-section">
+        <div className="hero-content">
+          {/* Title now renders conditionally based on viewport size */}
+          <h1>
+            {isMobile ? <>Orbital Unit <br /> 734</> : 'Orbital Unit 734'}
+          </h1>
+          <p className="hero-description">
+            Real-time telemetry and mission data from the outer sectors. Monitoring atmospheric and geological shifts on exoplanets.
+          </p>
+        </div>
+      </div>
+
+      {/* --- VERTICAL NAV (RIGHT CENTER - DESKTOP) --- */}
+      <nav className="vertical-nav">
+        <a href="#">MISSIONS</a>
+        <a href="#">ARCHIVES</a>
+        <a href="#">TELEMETRY</a>
+        <a href="#">CONTACT</a>
+      </nav>
+
+      {/* --- FOOTER (BOTTOM LEFT) --- */}
+      <footer className="main-footer">
+        <span>NASA Public Archives // 2025</span>
+      </footer>
     </div>
   )
 }
