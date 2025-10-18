@@ -8,7 +8,8 @@ export default function Satellite(props: any) {
   const head = useRef<Group>(null)
   const stripe = useRef<MeshBasicMaterial>(null)
   const light = useRef<PointLight>(null)
-  const { nodes, materials } = useGLTF('/satellite.glb')
+  // Corrected: Path is now relative to work on GitHub Pages
+  const { nodes, materials } = useGLTF('satellite.glb')
 
   useFrame((state, delta) => {
     if (!stripe.current || !head.current || !light.current) return
@@ -33,4 +34,5 @@ export default function Satellite(props: any) {
   )
 }
 
-useGLTF.preload('/satellite.glb')
+// Corrected: Path is now relative here as well
+useGLTF.preload('satellite.glb')
